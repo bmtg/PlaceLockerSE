@@ -1,4 +1,5 @@
 javascript: (function () {
+	// V0.2SE
     var count = 0;
     var thisUser = W.loginManager.user;
     if (thisUser === null)
