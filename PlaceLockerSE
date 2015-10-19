@@ -52,47 +52,7 @@ javascript: (function () {
         	var newPhone = normalizePhone(item.attributes.phone);
         	W.model.actionManager.add(new UpdateObject(item, { name: newName, phone: newPhone }));
 
-        	if (item.attributes.name.toUpperCase() == "MCDONALDS" || item.attributes.name.toUpperCase() == "MCDONALD'S" ||
-        	item.attributes.name.toUpperCase() == "MCDS" || item.attributes.name.toUpperCase() == "MCD'S" ||
-        	item.attributes.name.toUpperCase() == "MCDONALD" || item.attributes.name.toUpperCase() == "MCDONALD" ) {
-        		W.model.actionManager.add(new UpdateObject(item, { name: "McDonald's" }));
-        		W.model.actionManager.add(new UpdateObject(item, { aliases: ["McDonalds"] }));
-        		W.model.actionManager.add(new UpdateObject(item, { url: "mcdonalds.com" }));
-        		W.model.actionManager.add(new UpdateObject(item, { categories: ["FAST_FOOD"] }));
-        	}
         	
-        	if (item.attributes.name.toUpperCase() == "KFC" || item.attributes.name.toUpperCase() == "K F C" ||
-        	item.attributes.name.toUpperCase() == "KENTUCKY FRIED CHICKEN" || item.attributes.name.toUpperCase() == "KENTUCKY FRIED" ) {
-        		W.model.actionManager.add(new UpdateObject(item, { name: "KFC" }));
-        		W.model.actionManager.add(new UpdateObject(item, { aliases: ["Kentucky Fried Chicken"] }));
-        		W.model.actionManager.add(new UpdateObject(item, { url: "kfc.com" }));
-        		W.model.actionManager.add(new UpdateObject(item, { categories: ["FAST_FOOD"] }));
-        	}
-        	
-        	if (item.attributes.name.toUpperCase() == "7-ELEVEN" || item.attributes.name.toUpperCase() == "7 ELEVEN" || 
-        	item.attributes.name.toUpperCase() == "SEVEN-ELEVEN" || item.attributes.name.toUpperCase() == "SEVEN ELEVEN" || 
-        	item.attributes.name.toUpperCase() == "7-11" || item.attributes.name.toUpperCase() == "7 11" || 
-        	item.attributes.name.toUpperCase() == "711" || item.attributes.name.toUpperCase() == "SEVEN 11" ) {
-        		W.model.actionManager.add(new UpdateObject(item, { name: "7-Eleven" }));
-        		W.model.actionManager.add(new UpdateObject(item, { aliases: ["7-11"] }));
-        		W.model.actionManager.add(new UpdateObject(item, { url: "7-eleven.com" }));
-        		if ( categories.indexOf("GAS_STATION") > -1 ) {
-        			if ( categories.indexOf("ATM") > -1 ) { 
-        				W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE","ATM"] }));
-        			}
-        			else {
-        				W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE"] }));
-        			}
-        		}
-        		else {
-        			if ( categories.indexOf("ATM") > -1 ) { 
-        				W.model.actionManager.add(new UpdateObject(item, { categories: ["CONVENIENCE_STORE","ATM"] }));
-        			}
-        			else {
-        				W.model.actionManager.add(new UpdateObject(item, { categories: ["CONVENIENCE_STORE"] }));
-        			}
-        		}
-        	}
                 
                 
         	if (!item.attributes.name) {
@@ -105,10 +65,6 @@ javascript: (function () {
         	}
         	if (!addr.houseNumber) {
         	    alert("Place does not have a house number.");
-        		return;
-        	}
-        	if ( categories.indexOf("POST_OFFICE") > -1 && item.isPoint() ) {
-        		alert("Post Office should be an area.");
         		return;
         	}
         	
