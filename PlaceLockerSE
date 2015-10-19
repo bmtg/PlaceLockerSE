@@ -2,59 +2,61 @@ javascript: (function () {
     var count = 0;
     var thisUser = W.loginManager.user;
     if (thisUser === null)
-        return;
+    	return;
     var usrRank = thisUser.normalizedLevel;
     var UpdateObject;
-    var lockLevelReg = 2;
+    var lockLevel3 = 2;
 	var lockLevel4 = 3;
-	var lockLevel5 = 4;
+    var lockLevel5 = 4;
 
-    if (lockLevelReg > (usrRank - 1)) {
-        lockLevelReg = (usrRank - 1);
-    }
-	
-	if (lockLevel4 > (usrRank - 1)) { lockLevel4 = (usrRank - 1); }
+    if (lockLevel3 > (usrRank - 1)) { lockLevel3 = (usrRank - 1); }
+ 	   if (lockLevel4 > (usrRank - 1)) { lockLevel4 = (usrRank - 1); }
     if (lockLevel5 > (usrRank - 1)) { lockLevel5 = (usrRank - 1); }
-    
-    if (typeof (require) !== "undefined") {
-        UpdateObject = require("Waze/Action/UpdateObject");
-    }
-    else {
-        UpdateObject = W.Action.UpdateObject;
-    }
+        
+    if (typeof (require) !== "undefined") { UpdateObject = require("Waze/Action/UpdateObject"); }
+    else { UpdateObject = W.Action.UpdateObject; }
 
-	jQuery("#map-search input[name=q]").focus();
+    jQuery("#map-search input[name=q]").focus();
 
     for (var ix = 0; ix < W.selectionManager.selectedItems.length; ix++) {
         var item = W.selectionManager.selectedItems[ix].model;
         var categories   = item.attributes.categories;
-		venueStreet = W.model.streets.get(item.attributes.streetID);
-                 
-	if (item.type == "venue"  && !( item.attributes.name == null || item.attributes.name == ""  ||
-	item.attributes.houseNumber == null || item.attributes.houseNumber == "")  ) {
-        
-        if ( categories.indexOf("COLLEGE_UNIVERSITY") > -1 && categories.indexOf("PARKING_LOT") > -1 && item.attributes.lockRank < lockLevel4 ) {
-        	W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel4 }));
-        }
-        
-        else if (  item.isPoint() && categories.indexOf("COLLEGE_UNIVERSITY") > -1 && !(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 )  && item.attributes.lockRank < lockLevel4 )  {
-           W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel4 }));
-        }
-        
-        else if (  (categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
-               categories.indexOf("STADIUM_ARENA") > -1 ||  categories.indexOf("SCHOOL") > -1 ||
-               categories.indexOf("AIRPORT") > -1 ) && item.attributes.lockRank < lockLevel5) {
-        
-            W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel5 }));
-        }
-       
-        else if (  !(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
-               categories.indexOf("STADIUM_ARENA") > -1 ||  categories.indexOf("SCHOOL") > -1 ||
-               categories.indexOf("AIRPORT") > -1 ) && item.attributes.lockRank < lockLevelReg) {
-        
-    		W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevelReg }));
-        }
-              
+        var addr = item.getAddressDetails();
+        var validItem = (item.type === "venue" && item.attributes.name && addr.streetName && addr.streetName !== "No street" && addr.houseNumber);
+                
+    	if (validItem) {
+                
+            if ( categories.indexOf("COLLEGE_UNIVERSITY") > -1 && categories.indexOf("PARKING_LOT") > -1 && item.attributes.lockRank < lockLevel4 ) {
+                W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel4 }));
+            }
+            
+            else if ( item.isPoint() && categories.indexOf("COLLEGE_UNIVERSITY") > -1 && !(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 ) && 
+            	item.attributes.lockRank < lockLevel4 )  {
+            	W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel4 }));
+            }
+                
+            else if ( (categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
+                categories.indexOf("STADIUM_ARENA") > -1 ||    categories.indexOf("SCHOOL") > -1 ||
+                categories.indexOf("AIRPORT") > -1 ) && item.attributes.lockRank < lockLevel5) {
+                W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel5 }));
+            }
+                
+            else if (  categories.indexOf("POST_OFFICE") > -1  && item.attributes.lockRank < lockLevel3) {
+        		if (item.isPoint() ) { }
+        		else { W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel3 }));  }
+            }
+                
+            else if ( item.isPoint() && categories.indexOf("CAR_DEALERSHIP") > -1  && item.attributes.lockRank < lockLevel3) {
+                W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel3 }));
+            }
+                
+            else if (  !(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
+                categories.indexOf("STADIUM_ARENA") > -1 ||    categories.indexOf("SCHOOL") > -1 ||
+                categories.indexOf("AIRPORT") > -1 || categories.indexOf("POST_OFFICE") > -1 || categories.indexOf("CAR_DEALERSHIP") > -1 ) && 
+                item.attributes.lockRank < lockLevel3) {
+            	W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel3 }));
+            }
+                            
         }
     }
 })();
