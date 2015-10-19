@@ -1,6 +1,27 @@
 javascript: (function () {
-	// V0.2SE
-    var count = 0;
+	// V0.4SE
+	
+	function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function(txt) {
+        	return txt == txt.toUpperCase() ? txt : txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
+ 
+    function normalizePhone(s) {
+        if (!s) {
+            return s;
+        }
+        var s1 = s.replace(/\D/g,'');
+        var m = s1.match(/^1?(\d{3})(\d{3})(\d{4})$/);
+        if (!m) {
+            return s;
+        }
+        else {
+            return  m[1] + "-" + m[2] + "-" + m[3];
+        }
+    }
+    
+	var count = 0;
     var thisUser = W.loginManager.user;
     if (thisUser === null)
     	return;
@@ -11,7 +32,7 @@ javascript: (function () {
     var lockLevel5 = 4;
 
     if (lockLevel3 > (usrRank - 1)) { lockLevel3 = (usrRank - 1); }
- 	   if (lockLevel4 > (usrRank - 1)) { lockLevel4 = (usrRank - 1); }
+ 	if (lockLevel4 > (usrRank - 1)) { lockLevel4 = (usrRank - 1); }
     if (lockLevel5 > (usrRank - 1)) { lockLevel5 = (usrRank - 1); }
         
     if (typeof (require) !== "undefined") { UpdateObject = require("Waze/Action/UpdateObject"); }
@@ -24,40 +45,96 @@ javascript: (function () {
         var categories   = item.attributes.categories;
         var addr = item.getAddressDetails();
         var validItem = (item.type === "venue" && item.attributes.name && addr.streetName && addr.streetName !== "No street" && addr.houseNumber);
+        
+        if (item.type == "venue") {
+        
+        var newName = toTitleCase(item.attributes.name);
+        	var newPhone = normalizePhone(item.attributes.phone);
+        	W.model.actionManager.add(new UpdateObject(item, { name: newName, phone: newPhone }));
+
+        	if (item.attributes.name.toUpperCase() == "MCDONALDS" || item.attributes.name.toUpperCase() == "MCDONALD'S" ||
+        	item.attributes.name.toUpperCase() == "MCDS" || item.attributes.name.toUpperCase() == "MCD'S" ||
+        	item.attributes.name.toUpperCase() == "MCDONALD" || item.attributes.name.toUpperCase() == "MCDONALD" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "McDonald's" }));
+        		W.model.actionManager.add(new UpdateObject(item, { aliases: ["McDonalds"] }));
+        		W.model.actionManager.add(new UpdateObject(item, { url: "mcdonalds.com" }));
+        		W.model.actionManager.add(new UpdateObject(item, { categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	if (item.attributes.name.toUpperCase() == "KFC" || item.attributes.name.toUpperCase() == "K F C" ||
+        	item.attributes.name.toUpperCase() == "KENTUCKY FRIED CHICKEN" || item.attributes.name.toUpperCase() == "KENTUCKY FRIED" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "KFC" }));
+        		W.model.actionManager.add(new UpdateObject(item, { aliases: ["Kentucky Fried Chicken"] }));
+        		W.model.actionManager.add(new UpdateObject(item, { url: "kfc.com" }));
+        		W.model.actionManager.add(new UpdateObject(item, { categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	if (item.attributes.name.toUpperCase() == "7-ELEVEN" || item.attributes.name.toUpperCase() == "7 ELEVEN" || 
+        	item.attributes.name.toUpperCase() == "SEVEN-ELEVEN" || item.attributes.name.toUpperCase() == "SEVEN ELEVEN" || 
+        	item.attributes.name.toUpperCase() == "7-11" || item.attributes.name.toUpperCase() == "7 11" || 
+        	item.attributes.name.toUpperCase() == "711" || item.attributes.name.toUpperCase() == "SEVEN 11" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "7-Eleven" }));
+        		W.model.actionManager.add(new UpdateObject(item, { aliases: ["7-11"] }));
+        		W.model.actionManager.add(new UpdateObject(item, { url: "7-eleven.com" }));
+        		if ( categories.indexOf("GAS_STATION") > -1 ) {
+        			if ( categories.indexOf("ATM") > -1 ) { 
+        				W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE","ATM"] }));
+        			}
+        			else {
+        				W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE"] }));
+        			}
+        		}
+        		else {
+        			if ( categories.indexOf("ATM") > -1 ) { 
+        				W.model.actionManager.add(new UpdateObject(item, { categories: ["CONVENIENCE_STORE","ATM"] }));
+        			}
+        			else {
+        				W.model.actionManager.add(new UpdateObject(item, { categories: ["CONVENIENCE_STORE"] }));
+        			}
+        		}
+        	}
                 
-    	if (validItem) {
                 
-            if ( categories.indexOf("COLLEGE_UNIVERSITY") > -1 && categories.indexOf("PARKING_LOT") > -1 && item.attributes.lockRank < lockLevel4 ) {
-                W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel4 }));
-            }
-            
-            else if ( item.isPoint() && categories.indexOf("COLLEGE_UNIVERSITY") > -1 && !(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 ) && 
-            	item.attributes.lockRank < lockLevel4 )  {
-            	W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel4 }));
-            }
-                
-            else if ( (categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
-                categories.indexOf("STADIUM_ARENA") > -1 ||    categories.indexOf("SCHOOL") > -1 ||
-                categories.indexOf("AIRPORT") > -1 ) && item.attributes.lockRank < lockLevel5) {
-                W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel5 }));
-            }
-                
-            else if (  categories.indexOf("POST_OFFICE") > -1  && item.attributes.lockRank < lockLevel3) {
-        		if (item.isPoint() ) { }
-        		else { W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel3 }));  }
-            }
-                
-            else if ( item.isPoint() && categories.indexOf("CAR_DEALERSHIP") > -1  && item.attributes.lockRank < lockLevel3) {
-                W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel3 }));
-            }
-                
-            else if (  !(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
-                categories.indexOf("STADIUM_ARENA") > -1 ||    categories.indexOf("SCHOOL") > -1 ||
-                categories.indexOf("AIRPORT") > -1 || categories.indexOf("POST_OFFICE") > -1 || categories.indexOf("CAR_DEALERSHIP") > -1 ) && 
-                item.attributes.lockRank < lockLevel3) {
-            	W.model.actionManager.add(new UpdateObject(item, { lockRank: lockLevel3 }));
-            }
-                            
-        }
+        	if (!item.attributes.name) {
+        		alert("Place does not have a name.");
+        	    return;
+        	}
+        	if (!addr.streetName || addr.streetName === "No street") {
+        		alert("Place does not have a street.");
+        	    return;
+        	}
+        	if (!addr.houseNumber) {
+        	    alert("Place does not have a house number.");
+        		return;
+        	}
+        	if ( categories.indexOf("POST_OFFICE") > -1 && item.isPoint() ) {
+        		alert("Post Office should be an area.");
+        		return;
+        	}
+        	
+    		var levelToLock = lockLevel3;
+        	
+        	if (categories.indexOf("COLLEGE_UNIVERSITY") > -1 && categories.indexOf("PARKING_LOT") > -1) {
+        	    levelToLock = lockLevel4;
+        	}
+ 			else if (item.isPoint() && categories.indexOf("COLLEGE_UNIVERSITY") > -1 && 
+ 			!(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1)) {
+        	    levelToLock = lockLevel4;
+        	}
+ 			else if (categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
+        	        categories.indexOf("STADIUM_ARENA") > -1 || categories.indexOf("SCHOOL") > -1 ||
+        	        categories.indexOf("AIRPORT") > -1 ) {
+        	    levelToLock = lockLevel5;
+        	}
+ 		
+        	 
+        	if (item.attributes.lockRank < levelToLock) {
+        	    W.model.actionManager.add(new UpdateObject(item, { lockRank: levelToLock }));
+        	}
+    	
+    	}
+    	
     }
+    
+
 })();
