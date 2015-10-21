@@ -1,0 +1,289 @@
+
+
+
+javascript: (function () {
+	// V0.5SE
+	
+	function toTitleCase(str) {
+        if (!str) {
+            return str;
+        }
+        var allCaps = (str === str.toUpperCase());
+        return str.replace(/\w\S*/g, function(txt) {
+            return ((txt == txt.toUpperCase()) && !allCaps) ? txt : txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
+
+	function toTitleCaseNew(str) {
+        if (!str) {
+            return str;
+        }
+        var allCaps = (str === str.toUpperCase());
+        return str.replace(/\b([^\W_\d][^\s-]*) */g, function(txt) {
+            return ((txt == txt.toUpperCase()) && !allCaps) ? txt : txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
+	
+    function normalizePhone(s) {
+        if (!s) {
+            return s;
+        }
+        if (/^\(\d{3}\) \d{3}-\d{4}$/.test(s) || /^\d{3}-\d{3}-\d{4}$/.test(s)) {
+   			return s;
+		}
+        var s1 = s.replace(/\D/g,'');
+        var m = s1.match(/^1?(\d{3})(\d{3})(\d{4})$/);
+        if (!m) {
+            return s;
+        }
+        else {
+            return  m[1] + "-" + m[2] + "-" + m[3];
+        }
+    }
+    
+    function normalizeURL(s) {
+        if (!s) {
+            return s;
+        }
+        var m = s.match(/^https?:\/\/(.*)$/i);
+        if (m) {
+            return m[1];
+        }
+        else {
+            return s;
+        }
+    }
+ 
+    var count = 0;
+    var thisUser = W.loginManager.user;
+    if (thisUser === null)
+    	return;
+    var usrRank = thisUser.normalizedLevel;
+    var UpdateObject;
+    var lockLevel3 = 2;
+	var lockLevel4 = 3;
+    var lockLevel5 = 4;
+
+    if (lockLevel3 > (usrRank - 1)) { lockLevel3 = (usrRank - 1); }
+ 	if (lockLevel4 > (usrRank - 1)) { lockLevel4 = (usrRank - 1); }
+    if (lockLevel5 > (usrRank - 1)) { lockLevel5 = (usrRank - 1); }
+        
+    if (typeof (require) !== "undefined") { UpdateObject = require("Waze/Action/UpdateObject"); }
+    else { UpdateObject = W.Action.UpdateObject; }
+
+    jQuery("#map-search input[name=q]").focus();
+
+    for (var ix = 0; ix < W.selectionManager.selectedItems.length; ix++) {
+        var item = W.selectionManager.selectedItems[ix].model;
+        var categories   = item.attributes.categories;
+        var vname   = item.attributes.name;
+        var addr = item.getAddressDetails();
+        
+        if (item.type == "venue") {
+        
+        	var newUrl = normalizeURL(item.attributes.url);
+            var newName = toTitleCaseNew(vname);
+            var newPhone = normalizePhone(item.attributes.phone);
+            W.model.actionManager.add(new UpdateObject(item, { name: newName, phone: newPhone, url: newUrl }));
+            
+        	
+        	if (vname.toUpperCase() == "7-ELEVEN" || vname.toUpperCase() == "7 ELEVEN" || vname.toUpperCase() == "SEVEN-ELEVEN" || 
+        		vname.toUpperCase() == "SEVEN ELEVEN" || vname.toUpperCase() == "7-11" || vname.toUpperCase() == "7 11" || 
+        		vname.toUpperCase() == "711" || vname.toUpperCase() == "SEVEN 11" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "7-Eleven", aliases: ["7-11"], url: "7-eleven.com" }));
+        	}
+        	
+            else if (vname.toUpperCase() == "AAA" || vname.toUpperCase() == "AMERICAN AUTOMOBILE ASSOCIATION" ||
+            	vname.toUpperCase() == "A A A" || vname.toUpperCase() == "A.A.A." || vname.toUpperCase() == "Triple A" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "AAA", aliases: ["American Automobile Association"], url: "aaa.com", categories: ["ORGANIZATION_OR_ASSOCIATION"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "ACE HARDWARE" || (vname.toUpperCase() == "ACE" && categories.indexOf("HARDWARE_STORE") > -1 ) ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Ace Hardware", url: "acehardware.com", categories: ["HARDWARE_STORE"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "APPLEBEE'S" || vname.toUpperCase() == "APPLEBEES" ||
+        		vname.toUpperCase() == "APPLEBY'S" || vname.toUpperCase() == "APPLEBYS" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Applebee's", url: "applebees.com", categories: ["RESTAURANT"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "ARBY'S" || vname.toUpperCase() == "ARBYS" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Arby's", url: "arbys.com", categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "AUTOZONE" || vname.toUpperCase() == "AUTO ZONE" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "AutoZone", url: "autozone.com", categories: ["CAR_SERVICES"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "AVIS" || vname.toUpperCase() == "AVIS CAR RENTAL" ||
+        		vname.toUpperCase() == "AVIS RENT-A-CAR" || vname.toUpperCase() == "AVIS RENT A CAR" || 
+        		vname.toUpperCase() == "AVIS RENTAL" || vname.toUpperCase() == "AVIS RENTAL CAR" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Avis", url: "avis.com", categories: ["CAR_RENTAL"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "BANK OF AMERICA" || vname.toUpperCase() == "B OF A" || vname.toUpperCase() == "BOFA" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Bank of America", url: "bankofamerica.com", categories: ["BANK_FINANCIAL","ATM"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "BB&T" || vname.toUpperCase() == "BBT" || vname.toUpperCase() == "BB AND T" || 
+        		vname.toUpperCase() == "BBANDT" || vname.toUpperCase() == "BB & T" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "BB&T", aliases: ["BBT","BB and T"], url: "bbt.com", categories: ["BANK_FINANCIAL","ATM"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "BURGER KING" || vname.toUpperCase() == "BK" || vname.toUpperCase() == "BURGERKING" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Burger King", aliases: ["BK"], url: "bk.com", categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "CHICK-FIL-A" || vname.toUpperCase() == "CHIC-FIL-A" ||
+        		vname.toUpperCase() == "CHICK FIL A" || vname.toUpperCase() == "CHICKFILA" ||
+        		vname.toUpperCase() == "CHICFILA" || vname.toUpperCase() == "CHICK FILA" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Chick-fil-A", aliases: ["Chick Fil A","Chickfila"], url: "chickfila.com", categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "CHUCK E CHEESE'S" || vname.toUpperCase() == "CHUCK 'E' CHEESE'S" || vname.toUpperCase() == "CHUCK E CHEESES" || vname.toUpperCase() == "CEC" || 
+        		vname.toUpperCase() == "CHUCK E CHEESE" || vname.toUpperCase() == "CHUCK 'E' CHEESE" || vname.toUpperCase() == "CHUCK 'E CHEESE" || 
+        		vname.toUpperCase() == "CHUCK 'E CHEESE'S" || vname.toUpperCase() == "CHUCK 'E CHEESES" || vname.toUpperCase() == "CHUCK 'E' CHEESES" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Chuck E Cheese's", aliases: ["CEC"], url: "chuckecheese.com", categories: ["GAME_CLUB","RESTAURANT"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "CITGO" || vname.toUpperCase() == "CITGO GAS" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Citgo", url: "citgo.com" }));
+        	}
+            
+            else if (vname.toUpperCase() == "CVS PHARMACY" || vname.toUpperCase() == "CVS" || 
+            	vname.toUpperCase() == "CVS-PHARMACY" || vname.toUpperCase() == "C V S" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "CVS Pharmacy", url: "cvs.com", categories: ["PHARMACY","CONVENIENCE_STORE"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "DAIRY QUEEN" || vname.toUpperCase() == "DQ" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Dairy Queen", aliases: ["DQ"], url: "dq.com", categories: ["FAST_FOOD","ICE_CREAM"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "DUNKIN' DONUTS" || vname.toUpperCase() == "DUNKIN DONUTS" || 
+        		vname.toUpperCase() == "DUNKIN' DONUTS" || vname.toUpperCase() == "DD" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Dunkin' Donuts", url: "dunkindonuts.com", categories: ["BAKERY","CAFE"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "ENTERPRISE" || vname.toUpperCase() == "ENTERPRISE CAR RENTAL" ||
+        		vname.toUpperCase() == "ENTERPRISE RENT-A-CAR" || vname.toUpperCase() == "ENTERPRISE RENT A CAR" || 
+        		vname.toUpperCase() == "ENTERPRISE RENTAL" || vname.toUpperCase() == "ENTERPRISE RENTAL CAR" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Enterprise", url: "enterprise.com", categories: ["CAR_RENTAL"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "GNC" || vname.toUpperCase() == "G N C" ||
+        		vname.toUpperCase() == "GENERAL NUTRITION CENTER" || vname.toUpperCase() == "GENERAL NUTRITION CENTERS" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "GNC", aliases: ["General Nutrition Centers"], url: "gnc.com", categories: ["PERSONAL_CARE"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "KFC" || vname.toUpperCase() == "K F C" ||
+        		vname.toUpperCase() == "KENTUCKY FRIED CHICKEN" || vname.toUpperCase() == "KENTUCKY FRIED" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "KFC", aliases: ["Kentucky Fried Chicken"], url: "kfc.com", categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "LOWE'S" || vname.toUpperCase() == "LOWE'S HOME IMPROVEMENT" || 
+        		vname.toUpperCase() == "LOWES" || vname.toUpperCase() == "LOWES HOME IMPROVEMENT" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Lowe's", url: "lowes.com", categories: ["HARDWARE_STORE"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "MCDONALDS" || vname.toUpperCase() == "MCDONALD'S" || vname.toUpperCase() == "MCDS" || 
+        		vname.toUpperCase() == "MCD'S" || vname.toUpperCase() == "MCDONALD" || vname.toUpperCase() == "MCDONALD" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "McDonald's", url: "mcdonalds.com", categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "RACETRAC" || vname.toUpperCase() == "RACE TRAC" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "RaceTrac", url: "racetrac.com" }));
+        	}
+            
+            else if (vname.toUpperCase() == "SHELL" || vname.toUpperCase() == "SHELL GAS" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Shell", url: "shell.us/products-services/shell-for-motorists/station-locator.html" }));
+        	}
+            
+            else if (vname.toUpperCase() == "STARBUCKS" || vname.toUpperCase() == "STARBUCK" || vname.toUpperCase() == "STAR BUCKS" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Starbucks", aliases: [], url: "starbucks.com", categories: ["CAFE"] }));
+        	}
+        	
+            else if (vname.toUpperCase() == "TACO BELL" || vname.toUpperCase() == "TACOBELL" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "Taco Bell", url: "tacobell.com", categories: ["FAST_FOOD"] }));
+        	}
+        	
+        	else if (vname.toUpperCase() == "THE HOME DEPOT" || vname.toUpperCase() == "HOME DEPOT" || vname.toUpperCase() == "HOMEDEPOT" ) {
+        		W.model.actionManager.add(new UpdateObject(item, { name: "The Home Depot", url: "homedepot.com", categories: ["HARDWARE_STORE"] }));
+        	}
+        	
+        	
+            
+            
+                
+            if ( categories.indexOf("GAS_STATION") > -1 ) {
+        		if ( categories.indexOf("ATM") > -1 ) { 
+        			if ( categories.indexOf("CAR_WASH") > -1 ) { 
+        				W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE","CAR_WASH","ATM"] }));
+        			}
+        			else {
+    					W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE","ATM"] }));
+    				}
+    			}
+        		else {
+        			if ( categories.indexOf("CAR_WASH") > -1 ) { 
+        				W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE","CAR_WASH"] }));
+        			}
+        			else {
+    					W.model.actionManager.add(new UpdateObject(item, { categories: ["GAS_STATION","CONVENIENCE_STORE"] }));
+    				}
+        		}
+    		}
+    		    
+                
+        	if (!addr) {
+                alert("Place has no address.");
+                return;
+            }
+            if (!item.attributes.name) {
+                alert("Place does not have a name.");
+                return;
+            }
+            if (!addr.streetName || addr.streetName === "No street") {
+                alert("Place does not have a street.");
+                return;
+            }
+            if (!addr.houseNumber) {
+                alert("Place does not have a house number.");
+                return;
+            }
+            
+        	if ( (categories.indexOf("POST_OFFICE") > -1 || categories.indexOf("GAS_STATION") > -1 || categories.indexOf("PARKING_LOT") > -1 
+        	 || categories.indexOf("SCHOOL") > -1 )
+        	  && item.isPoint() ) {
+        		alert("This category should be an area.");
+        		return;
+        	}
+        	
+    		var levelToLock = lockLevel3;
+        	
+        	if (categories.indexOf("COLLEGE_UNIVERSITY") > -1 && categories.indexOf("PARKING_LOT") > -1) {
+        	    levelToLock = lockLevel4;
+        	}
+ 			else if (item.isPoint() && categories.indexOf("COLLEGE_UNIVERSITY") > -1 && 
+ 			!(categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1)) {
+        	    levelToLock = lockLevel4;
+        	}
+ 			else if (categories.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || categories.indexOf("COLLEGE_UNIVERSITY") > -1 ||
+        	        categories.indexOf("STADIUM_ARENA") > -1 || categories.indexOf("SCHOOL") > -1 ||
+        	        categories.indexOf("AIRPORT") > -1 ) {
+        	    levelToLock = lockLevel5;
+        	}
+ 		
+        	 
+        	if (item.attributes.lockRank < levelToLock) {
+        	    W.model.actionManager.add(new UpdateObject(item, { lockRank: levelToLock }));
+        	}
+    	
+    	}
+    	
+    }
+    
+//    console.log(W.model)
+    
+})();
+
+
