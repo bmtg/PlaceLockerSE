@@ -6,7 +6,7 @@ Current features:
 
 -- Gas station correction: This script will do the following to places that have the gas station category:
 
-1) If the primary name doesn't match the brand, then the primary name is moved to the alt name, and the brand is set as the primary name.  Example:  A place named CIRCLE K that has a brand of Shell, will be changed so that Shell is the Primary name, and Circle K is the alt name.  The brand is never changed by the script.
+1) If the primary name doesn't match the brand, then the primary name is moved to the alt name, and the brand is set as the primary name.  Example:  A place named CIRCLE K that has a brand of Shell, will be changed so that Shell is the Primary name, and Circle K is the alt name.  The brand is never changed by the script; if a station has changed brands that edit needs to be done manually, after which the script can be run.
 
 2) The category "Convenience Store" is added to the place.  Very few stations do not have a convenience store, so this adds a likely category.  If your station doesn't have a convenience store, then simply X out the convenience store category after running the script.  If the station had the categories of ATM or Car Wash already in the place, this will preserve them.  Any other categories are wiped out.
 
