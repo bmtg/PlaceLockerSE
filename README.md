@@ -1,5 +1,15 @@
 Place Locker (SE version) documentation
 
+Installation:
+
+Option 1: Shortcut key.  (to be added)
+
+Option 2: Bookmarklet.  (to be added)
+
+Usage:
+
+Select a place in WME, and press the shortcut key or browser bookmarklet.  Verify changes, adjust as needed, save.
+
 Current features:
 
 -- Place name harmonization: An ongoing project is to harmonize place names for chains.  This mostly involves having the same primary name, alt-name(s), category(s), and website address for every place from that chain.  This script will harmonize the current place based on the place name and the place harmonization sheet, for many chains on the sheet (more places added with each new update).  When using the script, if the script finds a match for a place on the harm. sheet, it will auto correct the name to the standard name, add any alt-names if needed, put in the correct category(s), and put in the standardized url for the chain.
