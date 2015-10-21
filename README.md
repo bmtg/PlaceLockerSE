@@ -21,6 +21,7 @@ Current features:
 -- url correction: If there is an http:// or https:// at the start of the website address, it will remove that from the website and keep the rest.
 
 -- Place locking: Three checks are done prior to locking
+
 1) Place area vs. point checking (partly complete - missing some categories right now):
 Script will check for area vs. point according to wiki guidance (including SE deviation for car dealership and US Post Office).  If the place is a point but is supposed to be an area, then the script will pop up an alert.
 2) Name checking: the place has to have a name, or it will pop up an alert.
