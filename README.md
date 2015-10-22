@@ -1,10 +1,13 @@
 Place Locker (SE version) documentation
+developed by vtpearce and bmtg
+comments for this version to: bmtg
+
 
 Installation:
 
-Option 1: Shortcut key.  (to be added)
+Option 1: Shortcut key.  (coming soon)
 
-Option 2: Bookmarklet.  (to be added)
+Option 2: Bookmarklet.  (coming soon)
 
 Usage:
 
@@ -40,8 +43,8 @@ Current features:
 
 -- Basic info validation: Three checks are done prior to locking
 
-1) Place area vs. point checking (partly complete - missing some categories right now):
-Script will check for area vs. point according to wiki guidance (including SE deviation for car dealership and US Post Office).  If the place is a point but is supposed to be an area, then the script will pop up an alert.
+1) Place area vs. point checking:
+Script will check for area vs. point according to wiki guidance (including SE deviation for  US Post Offices).  If the place is a point but is supposed to be an area, then the script will pop up an alert.  For categories that are not supposed to be mapped (junctions, water features), the script will pop up a warning instead of locking, and suggest manual locking if the place is truly valid.  (The reverse check, saying that an area place should be a point, is not performed except for car dealerships, because many of the "point" categories are used inside of valid area places.  Convenience store in a gas station area, for example.)  
 
 2) Name checking: the place has to have a name, or it will pop up an alert.
 
