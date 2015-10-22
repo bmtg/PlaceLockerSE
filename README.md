@@ -8,7 +8,9 @@ Installation:
 Option 1: Shortcut key.  
 For Chrome.  Install Shortcut Manager from https://chrome.google.com/webstore/detail/shortcut-manager/mgjjeipcdnnjhgodgjpfkffcejoljijf
 
-Open the PlaceLockerSE_Beta page here on the github directory, and copy all the code, starting and including the line "javascript: (function () {" 
+Open the PlaceLockerSE_Beta page here on the github directory, and copy all the code, starting with and including the line:
+
+javascript: (function () {" 
 
 Then, follow the intructions on this screen shot to assign the script to a keystroke: 
 
