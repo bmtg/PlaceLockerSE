@@ -1,5 +1,0 @@
-
-
-javascript: (function () {
-        		alert("Place does not have a name.");        	        
-})();
