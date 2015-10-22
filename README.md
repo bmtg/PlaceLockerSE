@@ -16,11 +16,23 @@ Then, follow the intructions on this screen shot to assign the script to a keyst
 
 http://prntscr.com/8two3c
 
-Option 2: Bookmarklet.  (coming soon)
+Option 2: Bookmarklet.  
+
+Open the PlaceLockerSE_Beta page here on the github directory, and copy all the code, starting with and including the line:
+
+javascript: (function () {" 
+
+Then follow the directions on the following page, and paste the copied code into the URL field there.
+
+https://wiki.waze.com/wiki/Bookmarklets
+
+-------------
 
 Usage:
 
 Select a place in WME, and press the shortcut key or browser bookmarklet.  Verify changes, adjust as needed, save.
+
+-------------
 
 Current features:
 
