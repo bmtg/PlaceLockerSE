@@ -5,7 +5,12 @@ comments for this version to: bmtg
 
 Installation:
 
-Option 1: Shortcut key.  (coming soon)
+Option 1: Shortcut key.  
+For Chrome.  Install Shortcut Manager from https://chrome.google.com/webstore/detail/shortcut-manager/mgjjeipcdnnjhgodgjpfkffcejoljijf
+
+Then, follow the intructions on this screen shot to assign the script to a keystroke: 
+
+http://prntscr.com/8two3c
 
 Option 2: Bookmarklet.  (coming soon)
 
