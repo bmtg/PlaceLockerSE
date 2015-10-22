@@ -5,7 +5,7 @@ comments for this version to: bmtg
 
 Installation:
 
-Option 1: Shortcut key.  
+-- Option 1: Shortcut key.  
 For Chrome.  Install Shortcut Manager from https://chrome.google.com/webstore/detail/shortcut-manager/mgjjeipcdnnjhgodgjpfkffcejoljijf
 
 Open the PlaceLockerSE_Beta page here on the github directory, and copy all the code, starting with and including the line:
@@ -16,7 +16,7 @@ Then, follow the intructions on this screen shot to assign the script to a keyst
 
 http://prntscr.com/8two3c
 
-Option 2: Bookmarklet.  
+-- Option 2: Bookmarklet.  
 
 Open the PlaceLockerSE_Beta page here on the github directory, and copy all the code, starting with and including the line:
 
