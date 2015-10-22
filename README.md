@@ -1,4 +1,4 @@
-Place Locker (SE version) documentation
+Place Locker (SE version) BETA documentation
 developed by vtpearce and bmtg
 comments for this version to: bmtg
 
