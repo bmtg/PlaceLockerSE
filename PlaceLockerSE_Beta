@@ -344,7 +344,7 @@ javascript: (function () {
             
         	if ( item.isPoint() && (tempCat.indexOf("GAS_STATION") > -1 || tempCat.indexOf("PARKING_LOT") > -1 || tempCat.indexOf("AIRPORT") > -1 ||
 			tempCat.indexOf("BRIDGE") > -1 || tempCat.indexOf("CEMETERY") > -1 || tempCat.indexOf("EMBASSY_CONSULATE") > -1 || 
-			tempCat.indexOf("FIRE_DEPARTMENT") > -1 || tempCat.indexOf("HOSPITAL_MEDICAL_CARE") > -1 || tempCat.indexOf("POLICE_STATION") > -1 || 
+			tempCat.indexOf("FIRE_DEPARTMENT") > -1 || tempCat.indexOf("POLICE_STATION") > -1 || 
 			tempCat.indexOf("PRISON_CORRECTIONAL_FACILITY") > -1 || tempCat.indexOf("SCHOOL") > -1 || tempCat.indexOf("SHOPPING_CENTER") > -1 || 
 			tempCat.indexOf("RACING_TRACK") > -1 || tempCat.indexOf("THEME_PARK") > -1 || tempCat.indexOf("GOLF_COURSE") > -1 || 
 			tempCat.indexOf("PARK") > -1  )  ) {
@@ -353,6 +353,10 @@ javascript: (function () {
         	}
         	if ( item.isPoint() && tempCat.indexOf("STADIUM_ARENA") > -1 ) {
         		alert("This category should be an area.  Please change it, or manually lock it.  ** Consider using Sports Court for small/local fields. **");
+        		return;
+        	}
+        	if ( item.isPoint() && tempCat.indexOf("HOSPITAL_MEDICAL_CARE") > -1 ) {
+        		alert("This category should be an area.  Please change it, or manually lock it (if it is an ER point inside a larger hospital area).  ** Please use the 'Office' category for non-emergency medical offices. **");
         		return;
         	}
         	if ( item.isPoint() && (tempCat.indexOf("JUNCTION_INTERCHANGE") > -1 || tempCat.indexOf("SEA_LAKE_POOL") > -1 || tempCat.indexOf("RIVER_STREAM") > -1 ||
@@ -394,4 +398,5 @@ javascript: (function () {
     
 
 })();
+
 
