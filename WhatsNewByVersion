@@ -1,0 +1,25 @@
+What's new in Place Locker:
+
+Version PlaceLockerSE_Beta0.6
+
+-- New Localization: Script will automatically detect the region of the selected place:  SE, SAT, or Undefined.  If it's in SE or SAT, regional locking rules, place formats, and Phone# formats are applied.  For other regions, these are kept to the basic locking at 3 and (xxx) phone format (until other regions' rules are brought in, in the future).  Note that for some app submitted places, there is no state name stored, so you have to enter at least a city and street in the address field in these cases for the script to run.
+
+-- More places are harmonized:  Recognizes about 32 Gas Station brands and over 200 common places now, and improved name matching for names that have missing or added apostrophes and dashes (Toys'R'Us, ToysRUs, Toys-R-Us, etc, are all recognized as a Toys R Us and corrected).  Common services for most of these places are now automatically added.  Any existing services are preserved.
+
+-- Common services are added for most categories.  For example, Schools: Restroom, Parking, AC, Wheelchair.  Any existing categories before running the script are preserved.
+
+-- Places with weird HNs are flagged for manual check and lock (8133455678, 123A, 31-2, 123 N Okl)
+
+-- Post Office category gives a warning that the category is only used for USPS.  Populates the url and alt name, warns to check that it's really a USPS or use other category, and adds services: creditcards, AC, parking, wheelchair
+
+-- Reminders for Stadium and Hospital categories, that they are only used in certain cases
+
+-- Common articles and prepositions in the middle of a name like 'the', 'and' and 'for' are made lower case.
+
+-- Fixed: Gas stations with the correct brand in all caps was moving the capped name to the alt.  Also alerts the editor that the brand may be incorrect in this case.
+ 
+
+-------------
+
+Version PlaceLockerSE_Beta0.5:
+This was the first documented version, so please see the readme file for complete feature list.
