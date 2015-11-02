@@ -1,5 +1,18 @@
 What's new in Place Locker:
 
+Version PlaceLockerSE_Beta0.7
+
+-- More places are harmonized.
+
+-- Improved title case with numerous ALLCAP words
+
+-- Fixed a bug in Thornton's gas stations where it was inserting Sunoco data
+
+-- Fixed a bug with detecting/alerting ATMs
+
+-- Plus minor improvements
+
+
 Version PlaceLockerSE_Beta0.6
 
 -- New Localization: Script will automatically detect the region of the selected place:  SE, SAT, or Undefined.  If it's in SE or SAT, regional locking rules, place formats, and Phone# formats are applied.  For other regions, these are kept to the basic locking at 3 and (xxx) phone format (until other regions' rules are brought in, in the future).  Note that for some app submitted places, there is no state name stored, so you have to enter at least a city and street in the address field in these cases for the script to run.
