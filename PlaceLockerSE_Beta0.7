@@ -33,7 +33,7 @@ javascript: (function () {
 		str = str.replace(/\b([^\W_\d][^\s-]*) */g, function(txt) {
 			return ((txt == txt.toUpperCase()) && !allCaps) ? txt : txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 		});
-		str = str.replace(/[oOlL]'[A-Za-z']{3,}/g, function(txt) {
+		str = str.replace(/[oOlLdD]'[A-Za-z']{3,}/g, function(txt) {
 			return ((txt == txt.toUpperCase()) && !allCaps) ? txt : txt.charAt(0).toUpperCase() + txt.charAt(1) + txt.charAt(2).toUpperCase() + txt.substr(3).toLowerCase();
 		});
 		str = str.replace(/[mM][cC][A-Za-z']{3,}/g, function(txt) {
