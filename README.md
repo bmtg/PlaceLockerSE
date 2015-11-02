@@ -41,6 +41,19 @@ Select a place in WME, and press the shortcut key or browser bookmarklet.  Verif
 
 -------------
 
+Examples (before and after using the script):
+
+Automatic correction of a McDonald's:
+http://prntscr.com/8y1ic1
+
+Automatic correction of a 7-Eleven:
+http://prntscr.com/8y1gk0
+
+A place with no harmonization data (standalone restaurant):
+http://prntscr.com/8y1js4
+
+-------------
+
 Current features:
 
 -- Regional Localization: Script will automatically detect the region of the selected place:  Currently SE, SAT, or Undefined.  If it's in SE or SAT, regional locking rules, place formats, and Phone# formats are applied.  For other regions, these are kept to the basic locking at 3 and (xxx) phone format (until other regions' rules are brought in, in the future).  **Note that for some app-submitted places, no state name is stored.  In these cases, you have to enter at least a city and street in the address field for the script to run.
@@ -64,15 +77,19 @@ Current features:
 
 1) If there are any lower case letters in any word, then it will Title Case that word. Example:  john's Pass BakERY -> John's Pass Bakery
 
-2) If there is an ALL CAPS word ALONG with other words that are not in all caps, then the ALL CAPS word will be left ALL CAPS while the others are title cased.  Examples:  The UPS store -> The UPS Store; CVS Pharmacy -> CVS Pharmacy
+2) If there is an ALL CAPS word ALONG with other words that are not in all caps, then the ALL CAPS word will be left ALL CAPS while the others are title cased.  Examples:  ALCCO store -> ALCCO Store; QVN Pharmacy -> QVN Pharmacy
 
-3) If the _entire_ place name is in ALL CAPS, then the script will change the entire name to Title Case.  Examples:  ALLCO -> Allco; IRS -> Irs; JOHN'S PASS BAKERY -> John's Pass Bakery.
+3) If the _entire_ place name is in ALL CAPS, then the script will change the entire name to Title Case.  Examples:  ALLCO -> Allco; JOHN'S PASS BAKERY -> John's Pass Bakery.
 
 4) Some common articles and prepositions are kept lowercase.  (a, an, the, of, for, and so forth)
 
-** As you can see, some single word ALL CAPS place names might be correct as ALL CAPS like IRS.  Please observe the name as you use the script and correct as necessary.  Also, if you encounter "cvs pharmacy", right now it will only give "Cvs Pharmacy".  Future work includes making certain common ALL CAP names/words stay upper case to minimize this effect.
+5) Some common ALL CAPS words are made/kept all caps (USA, IRS, BMW)
 
--- Phone correction: If the phone field contains 10 digits, and the digits are not in either xxx-xxx-xxxx or (xxx) xxx-xxxx formats, then the script will put the digits into xxx-xxx-xxxx format.  Those phone numbers that are already in either correct format are not altered.
+6) Chain name harmonization overrides title case processing.  
+
+** As you can see, some single word ALL CAPS place names might be correct as ALL CAPS.  Additionally, some places have internal caps, like CollegeUSA.  Unless they are in the chain list, they will be Title cased.  Please observe the name as you use the script and correct as necessary.  
+
+-- Phone correction: If the phone field contains 10 digits, and the digits are not in either xxx-xxx-xxxx or (xxx) xxx-xxxx formats, then the script will put the digits into xxx-xxx-xxxx format.  Those phone numbers that are already in either correct format are not altered.  A leading 1 will be stripped.
 
 -- url correction: If there is an http:// or https:// at the start of the website address, it will remove that from the website and keep the rest.
 
